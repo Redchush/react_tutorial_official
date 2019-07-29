@@ -1,4 +1,7 @@
 
+import * as R from 'ramda';
+
+
 class GameService{
 
   static calculateWinner(squares) {

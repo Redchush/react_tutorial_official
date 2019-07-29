@@ -1,42 +1,43 @@
 import React from 'react'
-import Square from "./Square";
 import GameService from "../service/GameService"
 import * as R from 'ramda';
+import BoardView from "./BoardView";
+// const { List } = require('immutable');
+import Immutable from 'immutable';
+
+
 
 class BoardContainer extends React.PureComponent{
 
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
-    this.renderSquare = R.bind(this.renderSquare, this);
+    this.handleClickCell = this.handleClickCell.bind(this);
     this.handleReload = R.bind(this.handleReload, this);
-    this.preventClick = R.bind(this.preventClick, this);
-    this.state = {
-      squares : new Array(9).fill(null),
+    BoardContainer.preventClick = R.bind(BoardContainer.preventClick, this);
+    this.state = BoardContainer.getDefaultState();
+  }
+
+  static getDefaultState(){
+    return {
+      cells: Immutable.List(new Array(9).fill(null)),
       xIsNext: true
     }
   }
+  static preventClick(evt){
+    evt.preventDefault();
+  }
 
-
-  handleClick(i) {
-      const newSquares = this.state.squares.slice();
+  handleClickCell(i) {
+      const newSquares = this.state.cells.toArray();
       if(GameService.calculateWinner(newSquares) !== null || newSquares[i] !== null){
         return;
       }
-      newSquares[i] = this.getPlayerIndex();
+      const newList = this.state.cells.set(i, this.getPlayerIndex());
       this.setState({
-        squares: newSquares,
+        cells: newList,
         xIsNext: !this.state.xIsNext,
       });
   }
-
-  getProfileBySign(sign){
-    if(!sign){
-      return;
-    }
-    return this.props.profiles.find((profile) => {return profile.sign === sign});
-  }
-
   getPlayerIndex(){
     return this.state.xIsNext ? 0 : 1;
   }
@@ -45,46 +46,24 @@ class BoardContainer extends React.PureComponent{
    return this.props.profiles.get(inx);
   }
   handleReload(){
-    this.setState({
-      squares: new Array(9).fill(null),
-      xIsNext: true,
-      winner : {}
-    })
-  }
-  preventClick(evt){
-    evt.preventDefault();
-  }
-
-  renderBoard(arr){
-    const renderSquere = this.renderSquare;
-    const width = arr.length;
-
-    return arr.map((val, idx1) => {
-      return (
-        <div className="board-row" key={'row' + idx1}>
-          {arr.map((val, idx2) => renderSquere(idx2 + idx1 * width))}
-        </div>
-      )
-    })
+    this.setState(BoardContainer.getDefaultState());
   }
 
   render() {
-    const winnerIndex = GameService.calculateWinner(this.state.squares);
+    const winnerIndex = GameService.calculateWinner(this.state.cells.toArray());
     const winner = (winnerIndex === 0 || winnerIndex === 1) ? this.props.profiles.get(winnerIndex) : null;
-    let status = winner ? 'Победитель ' + winner.name :
-      'Next player: ' + this.getCurrentProfile().name;
-    let arr =  new Array(3).fill(null);
+    let status = winner ? 'Победитель ' + winner.name : 'Next player: ' + this.getCurrentProfile().name;
     return (
-      <React.Fragment>
-        <div className="status">{status}</div>
-        <div className="desc">
-          <div className={'shadow ' + (winner ? 'show' : 'hide')} onClick={this.preventClick}></div>
-          <div className="game-field">
-            {this.renderBoard(arr)}
-          </div>
-        </div>
-        <button onClick={this.handleReload}> Reload </button>
-      </React.Fragment>
+      <BoardView
+        handleReload={this.handleReload}
+        handleClickCell={this.handleClickCell}
+        handleClickShadow={BoardContainer.preventClick}
+        profiles={this.props.profiles}
+        cells={this.state.cells}
+        status={status}
+        size={3}
+        winner={winner}
+      />
     );
   }
 

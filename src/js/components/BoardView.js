@@ -1,21 +1,35 @@
 
 import * as React from "react";
+import Square from "./Square";
 
-function renderSquare(i) {
+function renderSquare(props, i) {
+  let value = (props.cells.get(i) !== null) ? props.profiles.get(props.cells.get(i)).sign : null;
   return <Square key={'cell-' + i}
-                 value={(this.state.squares[i] !== null) ? this.props.profiles.get(this.state.squares[i]).sign : null}
-                 onClick={() => this.handleClick(i)}
+                 value={value}
+                 onClick={() => props.handleClickCell(i)}
   />;
 }
-
-
-var BoardView = function (props) {
-
-
-  return (
-    <div>{props.foo}</div>
-  );
+function renderBoard(props, arr){
+  const width = arr.length;
+  return arr.map((val, idx1) =>
+     (
+      <div className="board-row" key={'row' + idx1}>
+        {arr.map((val, idx2) => renderSquare(props, idx2 + idx1 * width))}
+      </div>
+    ))
 }
 
+const BoardView = props  => (
+  <React.Fragment>
+    <div className="status">{props.status}</div>
+    <div className="desc">
+      <div className={'shadow ' + (props.winner ? 'show' : 'hide')}></div>
+      <div className="game-field">
+        {renderBoard(props, new Array(props.size).fill(null))}
+      </div>
+    </div>
+    <button onClick={props.handleReload}> Reload </button>
+  </React.Fragment>
+);
 
 export default BoardView;

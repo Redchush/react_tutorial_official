@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "@types/react": "^16.8.20",
+    "bootstrap": "^4.3.1",
     "immutable": "^4.0.0-rc.12",
     "ramda": "^0.26.1",
     "react": "^16.8.6",
+    "react-bootstrap": "^1.0.0-beta.10",
     "react-dom": "^16.8.6",
     "react-scripts": "2.1.8"
   },
@@ -26,6 +28,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "babel-plugin-transform-react-statements": "^0.7.3"
+    "babel-plugin-transform-react-statements": "^0.7.3",
+    "react-unit": "^3.0.3"
   }
 }

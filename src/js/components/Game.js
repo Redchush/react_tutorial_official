@@ -1,9 +1,9 @@
-import Board from './Board.js';
 import React from 'react'
 import Immutable from 'immutable';
 import Profile from  '../model/Profile';
 import ProfileForm from './ProfileForm.js'
 import * as R from 'ramda'
+import BoardContainer from "./BoardContainer";
 
 // let { Map, List } = require('immutable');
 
@@ -14,7 +14,7 @@ class Game extends React.Component {
     let array =[
         new Profile("Player1", "Player1", "0"),
         new Profile("Player2", "Player2", "X")
-   ];
+    ];
     this.state = {
       profiles : Immutable.List(array)
     };
@@ -24,10 +24,10 @@ class Game extends React.Component {
 
   onChangeProfiles(profiles){
     this.setState({
-      profiles: profiles
+      profiles: profiles,
+      boardSize: 3
     })
   }
-
 
   render() {
     return (

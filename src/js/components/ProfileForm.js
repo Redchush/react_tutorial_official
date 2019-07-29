@@ -26,6 +26,14 @@ class ProfileForm extends React.Component {
       profiles : newList
     })
   }
+  onChangeSize(evt){
+    let newSize = evt.target.value;
+
+    this.setState({
+      size: evt.target.value
+    })
+  }
+
   onSubmit(evt){
     evt.preventDefault();
     this.props.onSubmit(this.state.profiles);
@@ -50,11 +58,15 @@ class ProfileForm extends React.Component {
     )
   }
 
-
   render(){
     return (
       <form className='profile-form' onSubmit={this.onSubmit}>
         {this.state.profiles.map(this.getProfileJsx.bind(this))}
+        <p>
+          <label>Board size:
+            <input name='BoardSize' type="text" value={3} onChange={this.onChangeSize.bind(this)}/>
+          </label>
+        </p>
         <p><input type="submit" value="Submit" /></p>
       </form>
     )

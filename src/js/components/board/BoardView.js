@@ -2,10 +2,13 @@
 import * as React from "react";
 import Square from "./Square";
 
+
 function renderSquare(props, i) {
   let value = (props.cells.get(i) !== null) ? props.profiles.get(props.cells.get(i)).sign : null;
+  let color = (props.cells.get(i) !== null) ? props.profiles.get(props.cells.get(i)).signColor : null;
   return <Square key={'cell-' + i}
                  value={value}
+                 color={color}
                  onClick={() => props.handleClickCell(i)}
   />;
 }
@@ -28,7 +31,7 @@ const BoardView = props  => (
         {renderBoard(props, new Array(props.size).fill(null))}
       </div>
     </div>
-    <button onClick={props.handleReload}> Reload </button>
+    <button className="btn-form-submit" onClick={props.handleReload}> Reload </button>
   </React.Fragment>
 );
 

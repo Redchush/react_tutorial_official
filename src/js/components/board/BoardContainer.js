@@ -1,5 +1,5 @@
 import React from 'react'
-import GameService from "../service/GameService"
+import GameService from "../../service/GameService"
 import * as R from 'ramda';
 import BoardView from "./BoardView";
 // const { List } = require('immutable');
@@ -61,7 +61,7 @@ class BoardContainer extends React.PureComponent{
         profiles={this.props.profiles}
         cells={this.state.cells}
         status={status}
-        size={3}
+        size={this.props.settings.boardSize}
         winner={winner}
       />
     );

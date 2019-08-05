@@ -1,0 +1,59 @@
+@import "variables";
+@import "util/mixins";
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+//@import "~mdbreact/dist/css/mdb.css";
+.Game{
+
+}
+
+
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  background: $colorBg;
+  font-size: 20px;
+}
+
+ol, ul {
+  padding-left: 30px;
+}
+.root{
+  .btn-form-submit{
+    @extend .btn;
+    min-width: 20%;
+    background: $colorIconText;
+    border: 1px solid $colorIconText;
+    color: white;
+
+    &:hover{
+      background: $colorIconDartText;
+      border: 1px solid $colorIconDartTextBorder;
+      color: white;
+    }
+  }
+}
+.profile-form{
+  display: block;
+  width: 100%;
+  flex: 1 auto;
+}
+
+.game {
+  @include flexCenter();
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-top: 30px;
+}
+
+
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+
+@import "components/board";

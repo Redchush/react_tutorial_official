@@ -1,0 +1,139 @@
+@import "../variables";
+@import "../util/mixins";
+
+.nav{
+  background: $colorDarkText;
+}
+.navigation{
+  background-color: $colorBg;
+
+
+  .nav-center{
+    @include flexCenter();
+    width: 100%;
+  }
+  .nav-right{
+    position: absolute;
+    background: transparent;
+    right:0;
+
+    .nav-link.active{
+      background: transparent;
+      color: $colorBg;
+    }
+  }
+}
+
+.tab-content{
+
+}
+.form-header{
+  color: $colorDarkText;
+  text-align: center;
+}
+.player{
+  color: #4F2B3B;
+  padding: 0 10px;
+  margin: 10px 0;
+  &:first-of-type{
+    border-right: 1px solid #4F2B3B;
+  }
+}
+.form-group{
+  font-size: 0.8em;
+}
+.profile-form{
+  .group-sign{
+    flex: 0 auto;
+    max-width: 50px;
+    text-align: center;
+    margin-left: 10px;
+
+    input{
+      text-align: center;
+    }
+  }
+  .group-name{
+    flex: 0 auto;
+    width: 70%;
+  }
+  .player--title{
+    font-weight: bold;
+    padding: 0 0 10px 0;
+    font-size: 1em;
+    text-align: center;
+    color: $colorDark;
+  }
+}
+.settings--container{
+  text-align: center;
+  .form-group{
+    margin: 0 5px;
+  }
+}
+
+.tab-pane{
+  padding: 10px 50px 20px;
+}
+
+.tab-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 180px;
+
+
+  .form-fields{
+    width: 100%;
+    height: 80%;
+    flex: 1 auto;
+    @include flexCenter();
+  }
+
+  .btn-toolbar{
+    width: 100%;
+  }
+  .form-control{
+    color: $colorDarkText;
+    border: 1px solid $colorBgDarker;
+  }
+}
+
+.active ~.nav--delimiter{
+  display: flex;
+}
+
+.nav--delimiter{
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  div{
+    flex: 0 auto;
+    height: 1px;
+    background: $colorDarkText;
+    margin-top: -1px;
+    width: 50%;
+  }
+}
+
+.nav-tabs {
+  border-bottom: none;
+  .nav-link{
+     color: $colorBg;
+     font-size: 1em;
+     padding: 12px 30px;
+      &:visited{
+        color: $colorBg;
+      }
+    &:hover{
+      border-color: $colorBg;
+    }
+    &.active{
+      background: $colorBg;
+      border: none;
+      color: $colorDarkText;
+    }
+  }
+}

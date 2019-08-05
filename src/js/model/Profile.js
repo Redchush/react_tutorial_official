@@ -1,9 +1,10 @@
 class Profile{
 
-  constructor(id, name, sign){
+  constructor(id, name, sign, color){
     this.id = id;
     this.name = name;
     this.sign = sign;
+    this.signColor = color;
     Object.freeze(this);
   }
   set(prop, val){
@@ -13,13 +14,20 @@ class Profile{
     if(prop === "sign"){
       return this.setSign(val);
     }
+    if(prop === "signColor"){
+      return this.setSignColor(val);
+
+    }
   }
 
   setName(val){
-    return new Profile(this.id, val, this.sign);
+    return new Profile(this.id, val, this.sign, this.signColor);
   }
   setSign(val){
-    return new Profile(this.id, this.name, val);
+    return new Profile(this.id, this.name, val, this.signColor);
+  }
+  setSignColor(val){
+    return new Profile(this.id, this.name, this.sign, val);
   }
 }
 

@@ -5,11 +5,16 @@
   "dependencies": {
     "@types/react": "^16.8.20",
     "bootstrap": "^4.3.1",
+    "bulma": "^0.7.5",
     "immutable": "^4.0.0-rc.12",
+    "mdbreact": "^4.18.1",
+    "node-sass": "^4.12.0",
     "ramda": "^0.26.1",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.10",
+    "react-color": "^2.17.3",
     "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.1",
     "react-scripts": "2.1.8"
   },
   "scripts": {
@@ -29,6 +34,7 @@
   ],
   "devDependencies": {
     "babel-plugin-transform-react-statements": "^0.7.3",
+    "sass-loader": "^7.1.0",
     "react-unit": "^3.0.3"
   }
 }

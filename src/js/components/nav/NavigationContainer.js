@@ -56,25 +56,6 @@ class NavigationContainer extends React.PureComponent {
               </div>
             </Tab.Content>
           </Tab.Container>
-          {/*<Tabs defaultActiveKey="profile" id="settings-tabs" className="justify-content-center" >*/}
-          {/*<Tab eventKey="settings" title="Settings"/>*/}
-          {/*<Tab eventKey="profile" title="Profiles"/>*/}
-          {/*<Tab eventKey="scores" title="Scores"/>*/}
-          {/*</Tabs>*/}
-
-            {/*<Tabs defaultActiveKey="profile" id="settings-tabs" className="justify-content-center" >*/}
-              {/*<Tab eventKey="settings" title="Settings">*/}
-                {/*<SettingsForm settings = {this.props.settings}*/}
-                              {/*onSubmit = {this.props.onChangeSettings}/>*/}
-              {/*</Tab>*/}
-              {/*<Tab eventKey="profile" title="Profiles">*/}
-                {/*<ProfileForm profiles = {this.props.profiles}*/}
-                             {/*onSubmit = {this.props.onChangeProfiles}/>*/}
-              {/*</Tab>*/}
-              {/*<Tab eventKey="scores" title="Scores">*/}
-                {/*<Scores/>*/}
-              {/*</Tab>*/}
-            {/*</Tabs>*/}
         </div>
 
       </React.Fragment>

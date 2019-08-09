@@ -3,28 +3,28 @@ import * as R from 'ramda';
 import styles from "../../../sass/components/navigation.scss"
 import {ButtonToolbar, Form, Button} from "react-bootstrap";
 import ProfileService from "../../service/ProfileService";
+import ProfileFormField from "./ProfileFormField";
+import U from "../../util/Util";
 
 
 class ProfileForm extends React.Component {
+
+  static formFields = ProfileFormField.constructAll();
+  static initialValidationResult =  function() {
+    return  R.reduce((accumulator, val) => { accumulator[val] = true; return accumulator}, {}, ProfileForm.formFields.keys())
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       profiles : this.props.profiles,
-      validation: this.getInitialValidation()
+      validationResult: ProfileForm.initialValidationResult()
     };
     this.onChangeProfileProp = R.curry(this.onChangeProfileProp.bind(this));
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  getInitialValidation(){
-    return {
-      name: true,
-      sign: true,
-      signColor: true
-    }
-  }
-
-  onChangeProfileProp(prop, index, evt){
+  onChangeProfileProp(field, index, evt){
     let value = evt.target.value;
     console.log(value);
 
@@ -32,22 +32,40 @@ class ProfileForm extends React.Component {
     if(!newProfile){
       return;
     }
-    let result = ProfileService.validate(prop, value);
-    let newValidation = {};
+    let result = field.validateChar();
     if(!result){
-      newValidation[prop] = false;
+      return;
     }
-    newProfile = newProfile.set(prop, value);
+    newProfile = newProfile.set(field.prop, value);
     let newList = this.state.profiles.set(index, newProfile);
     this.setState({
-      validation: !result ? newValidation : this.getInitialValidation(),
       profiles : newList
     })
   }
 
+
   onSubmit(evt){
     evt.preventDefault();
-    this.props.onSubmit(this.state.profiles);
+    let isFormValid = true;
+    let newValidationResult = ProfileForm.initialValidationResult();
+    ProfileForm.formFields.forEach((item)=> {
+        let propName = item.prop;
+        let currentPropValue = this.state.profiles[propName];
+        if(currentPropValue){
+          let result = item.validateString(currentPropValue);
+          if(!result){
+            isFormValid = false;
+            newValidationResult[propName] = false;
+          }
+        }
+      });
+    if(isFormValid){
+      this.props.onSubmit(this.state.profiles);
+    } else {
+      this.setState({
+        validationResult: newValidationResult
+      })
+    }
   }
 
   getProfileJsx(profile, index) {
@@ -55,37 +73,61 @@ class ProfileForm extends React.Component {
       <div key={"player_" + profile.id} className={'col-sm player'}>
         <div className="player--title">Player {index + 1} </div>
         <Form.Row className="justify-content-center">
-          <Form.Group className="group-name" controlId={'formGroupName' + index}>
-            <Form.Label>Name</Form.Label>
-            <Form.Control type="text" name={'login' + index}
-                          value={profile.name}
-                          onChange={this.onChangeProfileProp("name", index)}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please, enter a valid user name
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="group-sign" controlId={'formGroupSign' + index}>
-            <Form.Label>Sign</Form.Label>
-            <Form.Control type="text" name={'sign' + index}
-                          value={profile.sign}
-                          onChange={this.onChangeProfileProp("sign", index)}
-                          isValid={this.state.validation.sign}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please, enter a valid one sign
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="group-color" controlId={'formGroupSignColor' + index}>
-            <Form.Label> Hex Color </Form.Label>
-            <Form.Control type="text" name={'signColor' + index}
-                          value={profile.signColor}
-                          isValid={this.state.validation.signColor}
-                          onChange={this.onChangeProfileProp("signColor", index)} />
-            <Form.Control.Feedback type="invalid">
-              Please, enter a valid hex color. Example: #000000
-            </Form.Control.Feedback>
-          </Form.Group>
+          {ProfileForm.formFields.map( (field) =>(
+            <Form.Group className={"group-" + field.prop} controlId={'formGroupName' + index}>
+              <Form.Label>{field.label}</Form.Label>
+              <Form.Control type="text" name={field.prop + index}
+                            value={profile[field.prop]}
+                            onChange={this.onChangeProfileProp(field, index)}
+                            isValid = {this.state.validationResult[field.prop]}
+              />
+              <Form.Control.Feedback type="invalid">
+                {field.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
+          )
+          )}
+          {/*<Form.Group className="group-name" controlId={'formGroupName' + index}>*/}
+            {/*<Form.Label>Name</Form.Label>*/}
+            {/*<Form.Control type="text" name={'name' + index}*/}
+                          {/*value={profile.name}*/}
+                          {/*onChange={this.onChangeProfileProp("name", index)}*/}
+            {/*/>*/}
+            {/*<Form.Control.Feedback type="invalid">*/}
+              {/*Please, enter a valid user name*/}
+            {/*</Form.Control.Feedback>*/}
+          {/*</Form.Group>*/}
+          {/*<Form.Group className="group-name" controlId={'formGroupName' + index}>*/}
+            {/*<Form.Label>Name</Form.Label>*/}
+            {/*<Form.Control type="text" name={'name' + index}*/}
+                          {/*value={profile.name}*/}
+                          {/*onChange={this.onChangeProfileProp("name", index)}*/}
+            {/*/>*/}
+            {/*<Form.Control.Feedback type="invalid">*/}
+              {/*Please, enter a valid user name*/}
+            {/*</Form.Control.Feedback>*/}
+          {/*</Form.Group>*/}
+          {/*<Form.Group className="group-sign" controlId={'formGroupSign' + index}>*/}
+            {/*<Form.Label>Sign</Form.Label>*/}
+            {/*<Form.Control type="text" name={'sign' + index}*/}
+                          {/*value={profile.sign}*/}
+                          {/*onChange={this.onChangeProfileProp("sign", index)}*/}
+                          {/*isValid={this.state.validation.sign}*/}
+            {/*/>*/}
+            {/*<Form.Control.Feedback type="invalid">*/}
+              {/*Please, enter a valid one sign*/}
+            {/*</Form.Control.Feedback>*/}
+          {/*</Form.Group>*/}
+          {/*<Form.Group className="group-color" controlId={'formGroupSignColor' + index}>*/}
+            {/*<Form.Label> Hex Color </Form.Label>*/}
+            {/*<Form.Control type="text" name={'signColor' + index}*/}
+                          {/*value={profile.signColor}*/}
+                          {/*isValid={this.state.validation.signColor}*/}
+                          {/*onChange={this.onChangeProfileProp("signColor", index)} />*/}
+            {/*<Form.Control.Feedback type="invalid">*/}
+              {/*Please, enter a valid hex color. Example: #000000*/}
+            {/*</Form.Control.Feedback>*/}
+          {/*</Form.Group>*/}
         </Form.Row>
       </div>
     )

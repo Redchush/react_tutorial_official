@@ -16,10 +16,8 @@ class Profile{
     }
     if(prop === "signColor"){
       return this.setSignColor(val);
-
     }
   }
-
   setName(val){
     return new Profile(this.id, val, this.sign, this.signColor);
   }

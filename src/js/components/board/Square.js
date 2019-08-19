@@ -7,6 +7,11 @@ function Square(props) {
   if(props.color){
     styles.color = props.color;
   }
+  if(props.cellSize){
+    let dimension =  props.cellSize + "px";
+    styles.width = dimension;
+    styles.height = dimension;
+  }
   return (
     <button className="square"
             style={styles}

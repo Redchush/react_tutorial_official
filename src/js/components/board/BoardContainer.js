@@ -32,6 +32,9 @@ class BoardContainer extends React.PureComponent{
       if(GameService.calculateWinner(newSquares) !== null || newSquares[i] !== null){
         return;
       }
+      if(!GameService.hasAnyEmpty(newSquares)){
+        return;
+      }
       const newList = this.state.cells.set(i, this.getPlayerIndex());
       this.setState({
         cells: newList,
@@ -50,9 +53,15 @@ class BoardContainer extends React.PureComponent{
   }
 
   render() {
-    const winnerIndex = GameService.calculateWinner(this.state.cells.toArray());
+    let isEnd = false;
+    let cells = this.state.cells.toArray();
+    const winnerIndex = GameService.calculateWinner(cells);
     const winner = (winnerIndex === 0 || winnerIndex === 1) ? this.props.profiles.get(winnerIndex) : null;
     let status = winner ? 'Победитель ' + winner.name : 'Next player: ' + this.getCurrentProfile().name;
+    if(!winner && !GameService.hasAnyEmpty(cells)){
+      status = "Ничья!";
+      isEnd = true;
+    }
     return (
       <BoardView
         handleReload={this.handleReload}
@@ -61,8 +70,9 @@ class BoardContainer extends React.PureComponent{
         profiles={this.props.profiles}
         cells={this.state.cells}
         status={status}
-        size={this.props.settings.boardSize}
-        winner={winner}
+        boardSize={this.props.settings.boardSize}
+        cellSize={this.props.settings.cellSize}
+        isEnd={winner || isEnd}
       />
     );
   }

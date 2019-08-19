@@ -9,6 +9,7 @@ function renderSquare(props, i) {
   return <Square key={'cell-' + i}
                  value={value}
                  color={color}
+                 cellSize={props.cellSize}
                  onClick={() => props.handleClickCell(i)}
   />;
 }
@@ -26,9 +27,9 @@ const BoardView = props  => (
   <React.Fragment>
     <div className="status">{props.status}</div>
     <div className="desc">
-      <div className={'shadow ' + (props.winner ? 'show' : 'hide')}></div>
+      <div className={'shadow ' + (props.isEnd ? 'show' : 'hide')}></div>
       <div className="game-field">
-        {renderBoard(props, new Array(props.size).fill(null))}
+        {renderBoard(props, new Array(props.boardSize).fill(null))}
       </div>
     </div>
     <button className="btn-form-submit" onClick={props.handleReload}> Reload </button>

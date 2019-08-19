@@ -5,20 +5,22 @@ import {ButtonToolbar, Form, Button} from "react-bootstrap";
 import ProfileService from "../../service/ProfileService";
 import ProfileFormField from "./ProfileFormField";
 import U from "../../util/Util";
+import Immutable from "immutable";
 
 
 class ProfileForm extends React.Component {
 
   static formFields = ProfileFormField.constructAll();
   static initialValidationResult =  function() {
-    return  R.reduce((accumulator, val) => { accumulator[val] = true; return accumulator}, {}, ProfileForm.formFields.keys())
+    return  R.reduce((accumulator, val) => { accumulator[val] = true; return accumulator}, {}, R.keys(ProfileForm.formFields))
   };
 
   constructor(props) {
     super(props);
     this.state = {
       profiles : this.props.profiles,
-      validationResult: ProfileForm.initialValidationResult()
+      prevValidProfiles : this.props.profiles,
+      validationResults: Immutable.List([ProfileForm.initialValidationResult(), ProfileForm.initialValidationResult()])
     };
     this.onChangeProfileProp = R.curry(this.onChangeProfileProp.bind(this));
     this.onSubmit = this.onSubmit.bind(this);
@@ -26,8 +28,6 @@ class ProfileForm extends React.Component {
 
   onChangeProfileProp(field, index, evt){
     let value = evt.target.value;
-    console.log(value);
-
     let newProfile = this.state.profiles.get(index, undefined);
     if(!newProfile){
       return;
@@ -47,23 +47,36 @@ class ProfileForm extends React.Component {
   onSubmit(evt){
     evt.preventDefault();
     let isFormValid = true;
-    let newValidationResult = ProfileForm.initialValidationResult();
-    ProfileForm.formFields.forEach((item)=> {
-        let propName = item.prop;
-        let currentPropValue = this.state.profiles[propName];
-        if(currentPropValue){
-          let result = item.validateString(currentPropValue);
-          if(!result){
-            isFormValid = false;
-            newValidationResult[propName] = false;
-          }
+    let newValidationResult = [ProfileForm.initialValidationResult(), ProfileForm.initialValidationResult()];
+    const self = this;
+    let profilesToUpdate = this.state.profiles;
+    let checkProfile = (item, index) =>{
+      let propName = item.prop;
+      let propVal1 = self.state.profiles.get(index)[propName];
+      if(propVal1){
+        let result = item.validateString(propVal1);
+        if(!result){
+          isFormValid = false;
+          newValidationResult[index][propName] = false;
+          let profile = profilesToUpdate.get(index).set(propName, self.state.prevValidProfiles.get(index)[propName]);
+          profilesToUpdate = profilesToUpdate.set(index, profile);
         }
-      });
+      }
+    };
+    R.forEachObjIndexed((item)=> {
+       checkProfile(item, 0);
+       checkProfile(item, 1);
+      }, ProfileForm.formFields);
     if(isFormValid){
       this.props.onSubmit(this.state.profiles);
-    } else {
       this.setState({
-        validationResult: newValidationResult
+        profilesToUpdate: this.state.profiles,
+        validationResults: Immutable.List(newValidationResult)
+      })
+    } else {
+      this.props.onSubmit(profilesToUpdate);
+      this.setState({
+        validationResults: Immutable.List(newValidationResult)
       })
     }
   }
@@ -73,13 +86,14 @@ class ProfileForm extends React.Component {
       <div key={"player_" + profile.id} className={'col-sm player'}>
         <div className="player--title">Player {index + 1} </div>
         <Form.Row className="justify-content-center">
-          {ProfileForm.formFields.map( (field) =>(
-            <Form.Group className={"group-" + field.prop} controlId={'formGroupName' + index}>
+          {R.values(ProfileForm.formFields).map( (field) =>(
+            <Form.Group className={"group-" + field.prop} controlId={'formGroupName' + index} key={'prop-' + field.prop}>
               <Form.Label>{field.label}</Form.Label>
               <Form.Control type="text" name={field.prop + index}
                             value={profile[field.prop]}
                             onChange={this.onChangeProfileProp(field, index)}
-                            isValid = {this.state.validationResult[field.prop]}
+                            isValid = {this.state.validationResults.get(index)[field.prop]}
+                            maxLength={field.maxChars}
               />
               <Form.Control.Feedback type="invalid">
                 {field.errorMsg}

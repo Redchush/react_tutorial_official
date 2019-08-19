@@ -13,12 +13,12 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     let array =[
-        new Profile("Player1", "Player1", "0", "#1E441E"),
-        new Profile("Player2", "Player2", "X", "#1E441E")
+        new Profile("Player1", "Player1", "0", "#5F9EA0"),
+        new Profile("Player2", "Player2", "X", "#B8860B")
     ];
     this.state = {
       profiles : Immutable.List(array),
-      settings: new GameSettings(3)
+      settings: new GameSettings(3, 34)
     };
     this.onChangeProfiles = R.bind(this.onChangeProfiles, this);
     this.onChangeSettings = R.bind(this.onChangeSettings, this);

@@ -1,3 +1,6 @@
+/**
+ * @class
+ */
 class GameSettings{
 
   constructor(boardSize, cellSize){
@@ -14,10 +17,10 @@ class GameSettings{
     }
   }
   setBoardSize(val){
-    return new GameSettings(val);
+    return new GameSettings(val, this.cellSize);
   }
   setCellSize(val){
-    return new GameSettings(val);
+    return new GameSettings(this.boardSize, val);
   }
 }
 

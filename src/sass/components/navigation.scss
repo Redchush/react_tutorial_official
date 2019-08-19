@@ -42,7 +42,11 @@
 .form-group{
   font-size: 0.8em;
 }
+
+
+
 .profile-form{
+
   .group-sign{
     flex: 0 auto;
     max-width: 50px;
@@ -97,6 +101,18 @@
   .form-control{
     color: $colorDarkText;
     border: 1px solid $colorBgDarker;
+    &:not(.is-valid){
+      border-color: red;
+      box-shadow: 0 0 0 0.02rem red;
+      &:focus{
+        box-shadow: 0 0 0 0.2rem red;
+      }
+    }
+    &:valid,
+    &.is-valid{
+      background-image: none;
+      padding-right: 0.75rem;
+    }
   }
 }
 

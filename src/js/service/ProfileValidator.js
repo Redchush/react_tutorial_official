@@ -7,15 +7,23 @@ function Validation(full, char) {
 class ProfileValidator{
   constructor(){
     this.validators = {
-      name: new Validation(/^([a-z0-9]{2,10})$/ig, /^([a-z0-9]{0,10})$/ig),
-      sign: new Validation(/^([.])$/g, /^([.]?)$/g),
-      signColor: new Validation(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/ig, /^#([A-Fa-f0-9]{0,6})$/ig),
+      name: new Validation(/^([a-z0-9]{2,10})$/i, /^([a-z0-9]{0,10})$/i),
+      sign: new Validation(/^.$/, /^([.]?)$/),
+      signColor: new Validation(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/im, /^#([A-Fa-f0-9]{0,6})$/i),
     }
   }
+
+  TYPES = {
+    FULL : "full",
+    CHAR : "CHAR"
+  };
+
   validate(prop, type, value){
-    let validator = this.validators[prop];
-    if(validator){
-      return validator[type].test(value);
+    let regexp = this.validators[prop] && this.validators[prop][type];
+    if(regexp){
+      return regexp.test(value);
+    } else {
+      console.error("No such regexp for " + prop + " and " + type);
     }
     return false;
   }

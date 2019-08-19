@@ -8,7 +8,6 @@
     "bulma": "^0.7.5",
     "immutable": "^4.0.0-rc.12",
     "mdbreact": "^4.18.1",
-    "node-sass": "^4.12.0",
     "ramda": "^0.26.1",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.10",
@@ -34,7 +33,8 @@
   ],
   "devDependencies": {
     "babel-plugin-transform-react-statements": "^0.7.3",
-    "sass-loader": "^7.1.0",
-    "react-unit": "^3.0.3"
+    "node-sass": "^4.12.0",
+    "react-unit": "^3.0.3",
+    "sass-loader": "^7.1.0"
   }
 }

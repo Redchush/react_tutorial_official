@@ -13,7 +13,11 @@ const lines = [
 
 class GameService{
 
-  static calculateWinner(squares) {
+  isGameOver = (squares)=> this.calculateWinner(squares) !== null || !this.hasAnyEmpty(squares);
+
+  getCellCount = (boardSize)=> Math.pow(boardSize,2);
+
+  calculateWinner(squares) {
    for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if ((squares[a] !== null) && (squares[a] !== undefined) && squares[a] === squares[b] && squares[a] === squares[c]) {
@@ -23,7 +27,7 @@ class GameService{
     return null;
   }
 
-  static hasAnyEmpty(squares){
+   hasAnyEmpty(squares){
     if(!squares){
       return false;
     }
@@ -31,4 +35,4 @@ class GameService{
   }
 }
 
-export default GameService
+export default new GameService()

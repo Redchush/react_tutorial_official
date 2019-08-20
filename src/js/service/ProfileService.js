@@ -8,12 +8,15 @@ class ProfileService{
   constructor() {
     this.validate = R.curry(ProfileValidator.validate);
   }
-  getProfileBySign(profiles, sign){
-    if(!sign){
-      return;
-    }
-    return profiles.find((profile) => {return profile.sign === sign});
-  }
+
+  /**
+   *
+   * @param {Array.<Profile>} profiles
+   * @return {Map<string, Profile>}
+   */
+  mapProfileToSign = (profiles) => R.reduce((acc, val) => {
+      acc.set(val.sign, val); return acc;
+    }, new Map(), profiles);
 }
 
 export default new ProfileService()

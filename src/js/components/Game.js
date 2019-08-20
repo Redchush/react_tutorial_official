@@ -45,7 +45,8 @@ class Game extends React.Component {
                              onChangeSettings={this.onChangeSettings}/>
         <div className="game">
           <div className="game-board ">
-            <BoardContainer profiles = {this.state.profiles} settings={this.state.settings}/>
+            <BoardContainer profiles = {this.state.profiles}
+                            settings={this.state.settings}/>
           </div>
         </div>
         <div className="game-info">

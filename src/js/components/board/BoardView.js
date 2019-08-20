@@ -1,11 +1,13 @@
 
 import * as React from "react";
 import Square from "./Square";
+import * as PropTypes from "prop-types";
 
 
 function renderSquare(props, i) {
-  let value = (props.cells.get(i) !== null) ? props.profiles.get(props.cells.get(i)).sign : null;
-  let color = (props.cells.get(i) !== null) ? props.profiles.get(props.cells.get(i)).signColor : null;
+  let cell = props.cells.get(i);
+  let value = (cell !== null) ? props.profiles.get(cell).sign : null;
+  let color = (cell !== null) ? props.profiles.get(cell).signColor : null;
   return <Square key={'cell-' + i}
                  value={value}
                  color={color}
@@ -27,13 +29,22 @@ const BoardView = props  => (
   <React.Fragment>
     <div className="status">{props.status}</div>
     <div className="desc">
-      <div className={'shadow ' + (props.isEnd ? 'show' : 'hide')}></div>
-      <div className="game-field">
+      <div className={'shadow ' + (props.isEnd ? 'show' : 'hide')}/>
+      <div className="game-field" style={{fontSize : props.fontSize}}>
         {renderBoard(props, new Array(props.boardSize).fill(null))}
       </div>
     </div>
     <button className="btn-form-submit" onClick={props.handleReload}> Reload </button>
   </React.Fragment>
 );
+
+BoardView.propTypes = {
+  handleReload: PropTypes.func.isRequired,
+  boardSize: PropTypes.number,
+  fontSize: PropTypes.number,
+  status: PropTypes.string,
+  signToProfile: PropTypes.object,
+  profiles : PropTypes.object
+};
 
 export default BoardView;

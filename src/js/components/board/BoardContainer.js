@@ -4,35 +4,32 @@ import * as R from 'ramda';
 import BoardView from "./BoardView";
 // const { List } = require('immutable');
 import Immutable from 'immutable';
+import * as PropTypes from "prop-types";
+import ProfileService from "../../service/ProfileService";
 
 
 
-class BoardContainer extends React.PureComponent{
+class BoardContainer extends React.Component{
 
   constructor(props) {
     super(props);
-    this.handleClickCell = this.handleClickCell.bind(this);
     this.handleReload = R.bind(this.handleReload, this);
     BoardContainer.preventClick = R.bind(BoardContainer.preventClick, this);
-    this.state = BoardContainer.getDefaultState();
+    this.state = this.getDefaultState();
   }
 
-  static getDefaultState(){
-    return {
-      cells: Immutable.List(new Array(9).fill(null)),
-      xIsNext: true
-    }
-  }
+  getDefaultState = () => { return {
+    cells: Immutable.List(new Array(GameService.getCellCount(this.props.settings.boardSize)).fill(null)),
+    xIsNext: true
+  }};
+
   static preventClick(evt){
     evt.preventDefault();
   }
 
-  handleClickCell(i) {
+  handleClickCell = (i) => {
       const newSquares = this.state.cells.toArray();
-      if(GameService.calculateWinner(newSquares) !== null || newSquares[i] !== null){
-        return;
-      }
-      if(!GameService.hasAnyEmpty(newSquares)){
+      if(newSquares[i] !== null || GameService.isGameOver(newSquares)){
         return;
       }
       const newList = this.state.cells.set(i, this.getPlayerIndex());
@@ -40,17 +37,13 @@ class BoardContainer extends React.PureComponent{
         cells: newList,
         xIsNext: !this.state.xIsNext,
       });
-  }
-  getPlayerIndex(){
-    return this.state.xIsNext ? 0 : 1;
-  }
-  getCurrentProfile(){
-   let inx = this.getPlayerIndex();
-   return this.props.profiles.get(inx);
-  }
-  handleReload(){
-    this.setState(BoardContainer.getDefaultState());
-  }
+  };
+
+  getPlayerIndex = () => this.state.xIsNext ? 0 : 1;
+
+  getCurrentProfile = () => this.props.profiles.get(this.getPlayerIndex());
+
+  handleReload = () => this.setState(this.getDefaultState());
 
   render() {
     let isEnd = false;
@@ -72,10 +65,15 @@ class BoardContainer extends React.PureComponent{
         status={status}
         boardSize={this.props.settings.boardSize}
         cellSize={this.props.settings.cellSize}
+        fontSize={this.props.settings.fontSize}
         isEnd={winner || isEnd}
       />
     );
   }
-
 }
+BoardContainer.propTypes = {
+  settings: PropTypes.object,
+  profiles: PropTypes.object
+};
+
 export default BoardContainer

@@ -1,6 +1,7 @@
 
 
 import React from "react";
+import * as PropTypes from "prop-types";
 
 function Square(props) {
   let styles = {};
@@ -12,6 +13,7 @@ function Square(props) {
     styles.width = dimension;
     styles.height = dimension;
   }
+
   return (
     <button className="square"
             style={styles}
@@ -20,6 +22,12 @@ function Square(props) {
     </button>
   )
 }
+Square.propTypes = {
+  cellSize: PropTypes.number,
+  color: PropTypes.string,
+  value: PropTypes.string,
+  onClick: PropTypes.func.isRequired
+};
 
 
 export default Square

@@ -1,5 +1,19 @@
+/**
+ * Immutable
+ * @class
+ * @param id
+ * @param name
+ * @param sign
+ * @param color
+ */
 class Profile{
-
+  /**
+   *
+   * @param id
+   * @param name
+   * @param sign
+   * @param color
+   */
   constructor(id, name, sign, color){
     this.id = id;
     this.name = name;

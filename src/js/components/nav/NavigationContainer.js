@@ -1,9 +1,7 @@
 import * as React from "react";
 import ProfileForm from "./ProfileForm";
-import styles from "../../../sass/components/navigation.scss";
-import {Nav, Tab, Tabs} from "react-bootstrap";
+import {Nav, Tab} from "react-bootstrap";
 import SettingsForm from "./SettingsForm";
-import Scores from "./Scores";
 import {MDBIcon} from "mdbreact";
 
 class NavigationContainer extends React.PureComponent {
@@ -11,13 +9,6 @@ class NavigationContainer extends React.PureComponent {
 
   constructor(props) {
     super(props);
-  }
-  onChangeSize(evt){
-    let newSize = evt.target.value;
-
-    this.setState({
-      size: evt.target.value
-    })
   }
 
   render(){

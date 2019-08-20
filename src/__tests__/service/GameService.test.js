@@ -10,5 +10,8 @@ describe('GameService', () => {
     ]);
     expect(result2).toBeTruthy();
   });
+  it('get cells count', () => {
+    expect( GameService.getCellCount(3)).toEqual(9);
+  });
 
 });

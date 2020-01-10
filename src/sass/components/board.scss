@@ -68,13 +68,13 @@
     }
     .square {
       background: transparent;
-      border: 1px solid $colorDarkGreen;
+      border: none;
+      border-left:  1px solid $colorDarkGreen;
+      border-top:  1px solid $colorDarkGreen;
       color: $colorDarkGreen;
       font-size: inherit;
       line-height: 34px;
       height: 34px;
-      margin-right: -1px;
-      margin-top: -1px;
       padding: 0;
       text-align: center;
       width: 34px;
